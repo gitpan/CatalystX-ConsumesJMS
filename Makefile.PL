@@ -14,6 +14,7 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {
     "Catalyst" => 0,
     "Catalyst::Component" => 0,
+    "Catalyst::Controller::JMS" => 0,
     "Data::Printer" => 0,
     "Moose" => 0,
     "MooseX::MethodAttributes::Role" => 0,
@@ -39,7 +40,7 @@ my %WriteMakefileArgs = (
     "Moose::Role" => 0,
     "namespace::autoclean" => 0
   },
-  "VERSION" => "0.1_01",
+  "VERSION" => "0.1_04",
   "test" => {
     "TESTS" => "t/*.t t/test1/*.t t/test2/*.t"
   }
