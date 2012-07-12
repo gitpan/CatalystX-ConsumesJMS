@@ -36,11 +36,12 @@ my %WriteMakefileArgs = (
   "NAME" => "CatalystX::ConsumesJMS",
   "PREREQ_PM" => {
     "Catalyst::Controller::JMS" => 0,
+    "Catalyst::Utils" => 0,
     "Class::Load" => 0,
     "Moose::Role" => 0,
     "namespace::autoclean" => 0
   },
-  "VERSION" => "1.0",
+  "VERSION" => "1.01",
   "test" => {
     "TESTS" => "t/*.t t/test1/*.t t/test2/*.t"
   }

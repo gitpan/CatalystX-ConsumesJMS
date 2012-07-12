@@ -1,6 +1,6 @@
 package CatalystX::ConsumesJMS;
 {
-  $CatalystX::ConsumesJMS::VERSION = '1.0';
+  $CatalystX::ConsumesJMS::VERSION = '1.01';
 }
 {
   $CatalystX::ConsumesJMS::DIST = 'CatalystX-ConsumesJMS';
@@ -8,6 +8,7 @@ package CatalystX::ConsumesJMS;
 use Moose::Role;
 use namespace::autoclean;
 use Class::Load ();
+use Catalyst::Utils ();
 
 # ABSTRACT: role for components providing Catalyst actions consuming messages
 
@@ -35,15 +36,23 @@ requires '_kind_name';
 requires '_wrap_code';
 
 
+sub _split_class_name {
+    my ($self,$class_name) = @_;
+    my $kind_name = $self->_kind_name;
+
+    my ($appname,$basename) = ($class_name =~ m{^((?:\w|:)+)::\Q$kind_name\E::(.*)$});
+    return ($appname,$basename);
+}
+
 around COMPONENT => sub {
     my ($orig,$class,$appclass,$config) = @_;
 
+    my ($appname,$basename) = $class->_split_class_name($class);
     my $kind_name = $class->_kind_name;
+    my $ext_config = $appclass->config->{"${kind_name}::${basename}"} || {};
+    my $merged_config = Catalyst::Utils::merge_hashes($ext_config,$config);
 
-    my ($appname,$basename) = ($class =~ m{^((?:\w|:)+)::\Q$kind_name\E::(.*)$});
-    $config = $appclass->config->{"${kind_name}::${basename}"} || {};
-
-    return $class->$orig($appclass,$config);
+    return $class->$orig($appclass,$merged_config);
 };
 
 
@@ -52,9 +61,7 @@ sub expand_modules {
 
     my $class=ref($self);
 
-    my $kind_name = $class->_kind_name;
-
-    my ($appname,$basename) = ($class =~ m{^((?:\w|:)+)::\Q$kind_name\E::(.*)$});
+    my ($appname,$basename) = $class->_split_class_name($class);
 
     my $pre_routes = $class->routes;
 
@@ -90,7 +97,7 @@ sub expand_modules {
         push @result,$controller_pkg;
     }
 
-    $_->meta->make_immutable for @result;
+    #$_->meta->make_immutable for @result;
 
     return @result;
 }
@@ -179,7 +186,7 @@ CatalystX::ConsumesJMS - role for components providing Catalyst actions consumin
 
 =head1 VERSION
 
-version 1.0
+version 1.01
 
 =head1 SYNOPSIS
 
