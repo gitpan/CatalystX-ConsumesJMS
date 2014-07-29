@@ -1,7 +1,5 @@
 package CatalystX::RouteMaster;
-{
-  $CatalystX::RouteMaster::VERSION = '1.07';
-}
+$CatalystX::RouteMaster::VERSION = '1.08';
 {
   $CatalystX::RouteMaster::DIST = 'CatalystX-ConsumesJMS';
 }
@@ -222,7 +220,7 @@ CatalystX::RouteMaster - role for components providing Catalyst actions
 
 =head1 VERSION
 
-version 1.07
+version 1.08
 
 =head1 SYNOPSIS
 
